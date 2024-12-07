@@ -4,6 +4,7 @@ import { FaCarSide } from "react-icons/fa6";
 import CurrentlyParked from '../components/CurrentlyParked';
 import Slots from '../components/Slots';
 import Swal from 'sweetalert2';
+import Clock from '../components/Clock';
 
 // in
 import ParkIn from '../components/ParkIn';
@@ -81,11 +82,13 @@ const Dashboard = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-6 lg:gap-10">
                               {/* LEFT */}
                               <div>
+
                                     <Parkaid vehicles={vehicles} parkingRules={parkingRules} />
                               </div>
 
                               {/* RIGHT */}
                               <div>
+
                                     <div className="bg-offWhite p-4 mb-4 rounded-2xl w-full border-4 border-deepBlue">
                                           <Slots
                                                 vehicles={vehicles}
@@ -94,7 +97,8 @@ const Dashboard = () => {
                                           />
                                     </div>
 
-                                    <div className="flex flex-col gap-4">
+
+                                    <div className="flex flex-col gap-4 mb-4">
                                           {/* PARKED */}
                                           <CurrentlyParked vehicles={vehicles} hoursLimit={hoursLimit} />
                                     </div>

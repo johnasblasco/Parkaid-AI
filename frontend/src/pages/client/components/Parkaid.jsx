@@ -115,15 +115,21 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                   const response = await axios.get('https://capstone-parking.onrender.com/vehicle');
 
                   if (response.data && Array.isArray(response.data)) {
+                        // Log all vehicles fetched
+                        console.log("Fetched vehicles:", response.data);
+
+                        // Filter only the currently parked vehicles
                         const parkedInVehicles = response.data.filter((vehicle) => vehicle.status === true);
+                        console.log("Currently parked vehicles:", parkedInVehicles);
+
+                        // Check for a match
                         const matchedVehicle = parkedInVehicles.find((vehicle) => vehicle.plateNumber === plateNumber);
+                        console.log("Matched vehicle:", matchedVehicle);
 
                         if (matchedVehicle) {
-                              console.log('Vehicle found:', matchedVehicle);
-                              setVehicleData(matchedVehicle);
+                              setVehicleData(matchedVehicle); // Set matched vehicle data
                         } else {
-                              console.log('No matching vehicle found.');
-                              setVehicleData(null);
+                              setVehicleData(null); // No match found
                         }
                   } else {
                         console.error('Invalid or empty response from the API.');
@@ -134,6 +140,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                   setVehicleData(null); // Clear data in case of error
             }
       };
+
 
       // Handle the "Park In" operation
       const handleParkIn = async () => {
@@ -246,7 +253,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                   {/* Select Camera */}
                   {!imageSrc && !recognizedText && (
                         <div className="w-full bg-offWhite rounded-lg shadow-md p-6 text-center">
-                              <label className="block text-gray-700 font-medium mb-4">Select Camera:</label>
+                              <label className="block text-deepBlue font-bold mb-4">Select Camera:</label>
                               <select
                                     className="w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500"
                                     value={selectedDeviceId}
@@ -274,9 +281,9 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                               />
                               <button
                                     onClick={capture}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-lg shadow"
+                                    className="font-bold bg-deepBlue hover:scale-90 contrast-150 text-white px-8 py-3 rounded-lg shadow"
                               >
-                                    Capture Image
+                                    CAPTURE
                               </button>
                         </div>
                   )}
@@ -293,7 +300,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                               />
                               <button
                                     onClick={handleCaptureAndRecognize}
-                                    className={`bg-green-600 text-white font-medium px-6 py-2 rounded-lg shadow hover:bg-green-700 ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                                    className={`bg-greenWich  font-bold text-white text-xl hover:scale-90 px-6 py-2 rounded-lg shadow hover:bg-green-700 ${loading ? 'opacity-50 cursor-not-allowed' : ''
                                           }`}
                                     disabled={loading}
                               >
@@ -310,9 +317,9 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                               {vehicleData ? (
                                     <button
                                           onClick={handleParkOut}
-                                          className="bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg"
+                                          className="bg-pink hover:scale-90 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg"
                                     >
-                                          Park Out
+                                          PARK OUT
                                     </button>
                               ) : (
                                     <>
@@ -340,7 +347,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                                                 onClick={handleParkIn}
                                                 className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg mt-6"
                                           >
-                                                Park In
+                                                PARK IN
                                           </button>
                                     </>
                               )}
