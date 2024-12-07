@@ -115,15 +115,17 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                   const response = await axios.get('https://capstone-parking.onrender.com/vehicle');
 
                   if (response.data && Array.isArray(response.data)) {
+                        // Ensure parked vehicles are filtered properly
                         const parkedInVehicles = response.data.filter(vehicle => vehicle.status === true);
                         const matchedVehicle = parkedInVehicles.find(vehicle => vehicle.plateNumber === plateNumber);
 
+                        console.log('Matched Vehicle:', matchedVehicle);  // Debug log
+
                         if (matchedVehicle) {
-                              console.log('Vehicle found:', matchedVehicle);
-                              setVehicleData(matchedVehicle);
+                              setVehicleData(matchedVehicle);  // Set matched vehicle
                         } else {
                               console.log('No matching vehicle found.');
-                              setVehicleData(null);
+                              setVehicleData(null);  // Clear vehicle data if no match
                         }
                   } else {
                         console.error('Invalid or empty response from the API.');
@@ -134,6 +136,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                   setVehicleData(null); // Clear data in case of error
             }
       };
+
 
 
       // Handle the "Park In" operation
