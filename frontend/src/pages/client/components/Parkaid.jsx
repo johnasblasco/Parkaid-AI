@@ -191,6 +191,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                         setVehicleData(response.data);
                         console.log(newVehicle, parkingRules, myImg, 'Santisima Trinidad Parish Church - Diocese of Malolos', category === '2 Wheels' ? 15 : 20);
                         handlePrint(newVehicle, parkingRules, myImg, 'Santisima Trinidad Parish Church - Diocese of Malolos', category === '2 Wheels' ? 15 : 20);
+                        resetCapture();
                   }
             } catch (error) {
                   console.error('Error parking in:', error.message);
@@ -224,6 +225,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                               `
                         });
                         setVehicleData(null); // Clear vehicle data
+                        resetCapture();
                   }
             } catch (error) {
                   console.error('Error parking out:', error.message);
