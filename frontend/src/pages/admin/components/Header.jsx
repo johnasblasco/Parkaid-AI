@@ -57,7 +57,7 @@ const Header = () => {
             <header className='bg-white py-4 px-12 mb-4 flex items-center justify-between fixed top-0 rounded-b-3xl w-full z-10'>
                   <img src="/logo2.png" className='w-[200px] mx-4' />
                   <div className='flex items-center gap-4'>
-                        <p className='text-slate-800 text-2xl font-bold'>Howdy, Admin</p>
+                        <p className='text-slate-800 text-2xl font-bold'>Welcome, Admin</p>
                         <img onClick={logout} src="/logout.png" className='w-10 hover:cursor-pointer' alt="Logout" />
                   </div>
             </header>

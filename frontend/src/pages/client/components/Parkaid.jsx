@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import axios from 'axios';
 import { handlePrint } from '../components/handlePrint';
+import Swal from 'sweetalert2';
 
 const Parkaid = ({ vehicles, parkingRules }) => {
       const [imageSrc, setImageSrc] = useState(null); // Captured image
@@ -174,7 +175,19 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                   });
 
                   if (response.data) {
-                        alert('Vehicle parked in successfully!');
+                        Swal.fire({
+                              title: "PARK IN SUCCESSFUL!",
+                              width: 600,
+                              padding: "3em",
+                              color: "#716add",
+                              background: "#fff",
+                              backdrop: `
+                                rgba(0,0,123,0.4)
+                                url("/moving-car.gif")
+                                left top
+                                no-repeat
+                              `
+                        });
                         setVehicleData(response.data);
                         console.log(newVehicle, parkingRules, myImg, 'Santisima Trinidad Parish Church - Diocese of Malolos', category === '2 Wheels' ? 15 : 20);
                         handlePrint(newVehicle, parkingRules, myImg, 'Santisima Trinidad Parish Church - Diocese of Malolos', category === '2 Wheels' ? 15 : 20);
@@ -197,7 +210,19 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                   });
 
                   if (response.data) {
-                        alert('Vehicle parked out successfully!');
+                        Swal.fire({
+                              title: "PARK OUT SUCCESSFUL!",
+                              width: 600,
+                              padding: "3em",
+                              color: "#716add",
+                              background: "#fff",
+                              backdrop: `
+                                rgba(0,0,123,0.4)
+                                url("/moving-car.gif")
+                                left top
+                                no-repeat
+                              `
+                        });
                         setVehicleData(null); // Clear vehicle data
                   }
             } catch (error) {
@@ -213,52 +238,61 @@ const Parkaid = ({ vehicles, parkingRules }) => {
             }
       };
 
+
       return (
-            <div className="flex flex-col rounded-xl border-4 border-deepBlue items-center justify-center min-h-screen bg-offWhite p-4">
+            <div className="flex flex-col items-center justify-center lg:h-[700px] w-full max-w-3xl mx-auto bg-gray-100 p-6 rounded-lg shadow-lg space-y-6">
+                  {/* Select Camera */}
+                  {!imageSrc && !recognizedText && (
+                        <div className="w-full bg-offWhite rounded-lg shadow-md p-6 text-center">
+                              <label className="block text-gray-700 font-medium mb-4">Select Camera:</label>
+                              <select
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500"
+                                    value={selectedDeviceId}
+                                    onChange={(e) => setSelectedDeviceId(e.target.value)}
+                              >
+                                    {devices.map((device) => (
+                                          <option key={device.deviceId} value={device.deviceId}>
+                                                {device.label || `Camera ${device.deviceId}`}
+                                          </option>
+                                    ))}
+                              </select>
+                        </div>
+                  )}
 
-
-                  <div className="mb-4">
-                        <label className="block text-gray-700 mb-2">Select Camera:</label>
-                        <select
-                              className="border border-gray-300 rounded p-2"
-                              value={selectedDeviceId}
-                              onChange={(e) => setSelectedDeviceId(e.target.value)}
-                        >
-                              {devices.map((device) => (
-                                    <option key={device.deviceId} value={device.deviceId}>
-                                          {device.label || `Camera ${device.deviceId}`}
-                                    </option>
-                              ))}
-                        </select>
-                  </div>
-
-                  {showWebcam && (
-                        <div className="bg-white shadow-lg rounded-lg p-4 mb-6">
+                  {/* Webcam Section */}
+                  {!imageSrc && (
+                        <div className="w-full bg-offWhite rounded-lg shadow-lg p-6 flex flex-col items-center">
                               <Webcam
                                     audio={false}
                                     ref={webcamRef}
                                     screenshotFormat="image/jpeg"
                                     videoConstraints={videoConstraints}
-                                    className="rounded-lg border border-gray-300"
-                                    width={640}
+                                    className="rounded-lg border border-gray-300 mb-4"
+                                    style={{ width: '400px', height: '300px' }}
                               />
+                              <button
+                                    onClick={capture}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-lg shadow"
+                              >
+                                    Capture Image
+                              </button>
                         </div>
                   )}
 
-                  <button
-                        onClick={capture}
-                        className="bg-bloe hover:scale-95 text-white font-bold py-3 px-6 rounded mb-4"
-                  >
-                        CAPTURE
-                  </button>
-
-                  {imageSrc && (
-                        <div className="text-center">
-                              <h2 className="text-xl font-semibold mb-2 text-gray-700">Captured Image</h2>
-                              <img src={imageSrc} alt="Captured" className="rounded-lg border border-gray-300 mb-4" width={400} height={400} />
+                  {/* Captured Image Section */}
+                  {imageSrc && !recognizedText && (
+                        <div className="w-full text-center bg-offWhite rounded-lg shadow-lg p-6">
+                              <h2 className="text-lg font-semibold text-gray-700 mb-4">Captured Image</h2>
+                              <img
+                                    src={imageSrc}
+                                    alt="Captured"
+                                    className="rounded-lg mx-auto border border-gray-300 shadow-lg mb-4"
+                                    style={{ width: '400px', height: '300px' }}
+                              />
                               <button
                                     onClick={handleCaptureAndRecognize}
-                                    className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    className={`bg-green-600 text-white font-medium px-6 py-2 rounded-lg shadow hover:bg-green-700 ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                                          }`}
                                     disabled={loading}
                               >
                                     {loading ? 'Recognizing...' : 'Recognize Plate'}
@@ -266,56 +300,64 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                         </div>
                   )}
 
+                  {/* Detected Plate Section */}
                   {recognizedText && (
-                        <div className="mt-6 bg-white shadow-md rounded-lg p-4 w-full max-w-md text-center">
-                              <h2 className="text-xl font-semibold mb-2 text-gray-700">Detected Plate Number:</h2>
-                              <pre className="text-4xl text-gray-900">{recognizedText}</pre>
-                              {!vehicleData ? (
+                        <div className="w-full bg-white shadow-lg rounded-lg p-8 text-center">
+                              <h2 className="text-2xl font-bold text-gray-800 mb-6">Detected Plate Number</h2>
+                              <p className="text-4xl font-mono text-blue-700 mb-8">{recognizedText}</p>
+                              {vehicleData ? (
+                                    <button
+                                          onClick={handleParkOut}
+                                          className="bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg"
+                                    >
+                                          Park Out
+                                    </button>
+                              ) : (
                                     <>
-                                          <div className="flex justify-center mt-8 space-x-4">
+                                          <div className="flex justify-center mt-4 space-x-8">
                                                 {['2 Wheels', '3 Wheels', '4 Wheels'].map((cat) => (
-                                                      <label key={cat} className="text-gray-700 flex items-center">
+                                                      <label
+                                                            key={cat}
+                                                            className="flex items-center space-x-3 bg-gray-100 px-4 py-2 rounded-lg shadow cursor-pointer hover:bg-gray-200 transition"
+                                                      >
                                                             <input
                                                                   type="radio"
                                                                   value={cat}
                                                                   checked={category === cat}
                                                                   onChange={() => setCategory(cat)}
-                                                                  className="mr-2 transform scale-150"  // Increase size by scaling
+                                                                  className="form-radio w-6 h-6"
                                                             />
-                                                            {cat}
+                                                            <span className="text-lg font-medium text-gray-800">{cat}</span>
                                                       </label>
                                                 ))}
                                           </div>
-
-                                          <p className="mt-2 text-gray-600">
-                                                Charges: <span className="font-bold">{category === '2 Wheels' ? '15' : '20'} pesos</span>
+                                          <p className="mt-6 text-lg text-gray-700">
+                                                Charges: <span className="font-bold text-gray-900">{category === '2 Wheels' ? '15' : '20'} pesos</span>
                                           </p>
                                           <button
                                                 onClick={handleParkIn}
-                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                                                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg mt-6"
                                           >
-                                                PARK IN
+                                                Park In
                                           </button>
                                     </>
-                              ) : (
-                                    <button
-                                          onClick={handleParkOut}
-                                          className="bg-pink hover:scale-90 text-white font-bold py-3 px-6 rounded mt-4"
-                                    >
-                                          PARK OUT
-                                    </button>
                               )}
                         </div>
                   )}
 
+
+                  {/* Reset Button */}
                   <button
                         onClick={resetCapture}
-                        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mt-4"
+                        className="bg-gray-600 hover:bg-gray-700 text-white font-medium px-6 py-2 rounded-lg shadow mt-6"
                   >
                         Reset
                   </button>
             </div>
       );
+
+
+
 };
 
 export default Parkaid;

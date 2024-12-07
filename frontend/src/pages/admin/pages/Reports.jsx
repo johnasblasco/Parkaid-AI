@@ -313,12 +313,12 @@ const Reports = () => {
                         <div className='flex justify-between ml-[3%] w-[75vw] h-[20vh]'>
                               {/* today's vehicle */}
                               <div className='h-max-700:p-16 flex gap-4 items-center pt-10 justify-center relative border-4 border-deepBlue shadow-2xl rounded-3xl bg-white p-2 w-[30%]'>
-                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Today's Vehicle</p>
+                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Daily Vehicle</p>
                                     <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>{todaysVehicles}</p>
                               </div>
                               {/* today earnings */}
                               <div className='h-max-700:p-16 flex gap-4 items-center pt-10 justify-center relative border-4 border-deepBlue shadow-2xl rounded-3xl bg-white p-2 w-[30%]'>
-                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Today's Earnings</p>
+                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Daily Earnings</p>
                                     <p className='h-max-700:text-3xl text-5xl font-bold text-deepBlue'>PHP</p>
                                     <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>{todaysEarnings}.00</p>
                               </div>
