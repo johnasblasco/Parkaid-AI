@@ -34,7 +34,7 @@ const CurrentlyParked = ({ vehicles, hoursLimit }) => {
       const isOvertime = (hours) => hours >= hoursLimit && hoursLimit !== 0;
 
       return (
-            <div className="font-bold relative border-4 border-deepBlue shadow-2xl max-h-[50vh] p-4 pb-8 overflow-y-auto bg-offWhite rounded-2xl">
+            <div className="font-bold relative border-4 border-deepBlue shadow-2xl max-h-[350px] p-4 pb-8 overflow-y-auto bg-offWhite rounded-2xl">
                   {/* Responsive Table */}
                   <div className="overflow-x-auto">
                         <table className="w-full table-auto text-sm lg:text-base">
