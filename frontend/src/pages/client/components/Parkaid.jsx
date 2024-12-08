@@ -246,7 +246,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
 
 
       return (
-            <div className="flex flex-col items-center justify-center lg:h-[700px] w-full max-w-3xl mx-auto bg-gray-100 p-6 rounded-lg shadow-lg space-y-6">
+            <div className=" mt-10 shadow-2xl flex flex-col items-center justify-center  md:h-[800px] w-full max-w-3xl mx-auto bg-black/10 p-6 rounded-lg  space-y-8">
                   {/* Select Camera */}
                   {!imageSrc && !recognizedText && (
                         <div className="w-full bg-offWhite rounded-lg shadow-md p-6 text-center">
@@ -278,7 +278,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                               />
                               <button
                                     onClick={capture}
-                                    className="font-bold bg-deepBlue hover:scale-90 contrast-150 text-white px-8 py-3 rounded-lg shadow"
+                                    className="my-4 font-bold bg-deepBlue hover:scale-90 contrast-150 text-white px-8 py-3 rounded-lg shadow"
                               >
                                     CAPTURE
                               </button>
@@ -293,7 +293,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                                     src={imageSrc}
                                     alt="Captured"
                                     className="rounded-lg mx-auto border border-gray-300 shadow-lg mb-4"
-                                    style={{ width: '400px', height: '300px' }}
+                                    style={{ width: '400px', height: '400px' }}
                               />
                               <button
                                     onClick={handleCaptureAndRecognize}

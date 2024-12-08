@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
-import { MdLocalPrintshop } from "react-icons/md";
+import { MdLocalPrintshop, MdDelete, MdCheckCircle, MdEdit } from "react-icons/md";
 import Swal from 'sweetalert2';
 
 const ManageAccount = () => {
@@ -39,16 +39,16 @@ const ManageAccount = () => {
                         setInactiveUsers(inactiveUsers);
                   })
                   .catch(err => console.log('Error fetching users:', err));
-      }, [oyGalaw]); // Dependency to re-fetch on action
+      }, [oyGalaw]);
 
       const handleSaveButton = async (user) => {
             try {
                   const { value: formValues } = await Swal.fire({
                         title: "Edit Name, Username, and Password",
                         html: `
-          <input id="swal-input1" class="swal2-input" placeholder="Name" value="${user.name}">
-          <input id="swal-input2" class="swal2-input" placeholder="Username" value="${user.username}">
-          <input id="swal-input3" type="password" class="swal2-input" placeholder="New Password">`,
+                <input id="swal-input1" class="swal2-input" placeholder="Name" value="${user.name}">
+                <input id="swal-input2" class="swal2-input" placeholder="Username" value="${user.username}">
+                <input id="swal-input3" type="password" class="swal2-input" placeholder="New Password">`,
                         focusConfirm: false,
                         preConfirm: () => {
                               const name = document.getElementById("swal-input1").value;
@@ -77,29 +77,22 @@ const ManageAccount = () => {
             }
       };
 
-
-
       const handleAcceptUser = async (userId) => {
             try {
                   const response = await axios.put(
                         `https://capstone-parking.onrender.com/user/${userId}`,
-                        { status: true }  // Ensure status is sent as a boolean
+                        { status: true }
                   );
-                  console.log(response.data);  // Log the response for debugging
-                  setOyGalaw(!oyGalaw);  // Refresh state to reflect changes
+                  setOyGalaw(!oyGalaw);
             } catch (error) {
                   console.error("Error activating user:", error.response?.data || error.message);
             }
       };
 
-
-
-
       const handleDeleteUser = async (userId) => {
             try {
-                  // Delete the user
                   await axios.delete(`https://capstone-parking.onrender.com/user/${userId}`);
-                  setOyGalaw(!oyGalaw); // Trigger re-fetch of data
+                  setOyGalaw(!oyGalaw);
             } catch (error) {
                   console.log(error);
             }
@@ -121,20 +114,22 @@ const ManageAccount = () => {
                                                 .filter((user) => user.name.toUpperCase().includes(search.toUpperCase()))
                                                 .map((user) => (
                                                       <li key={user._id} className="font-bold flex justify-between items-center p-3 border-b hover:bg-gray-50 transition-colors">
-                                                            <span className="text-lg font-semibold">{user.name} - {user.username}</span>
+                                                            <span className="text-lg font-semibold">{user.name} is knocking at the door!</span>
                                                             <div className="flex space-x-2">
                                                                   <button
-                                                                        className="bg-green-500 text-white py-2 px-4 rounded-lg shadow-sm hover:bg-green-600 transition-colors"
+                                                                        className="bg-greenWich contrast-150 text-white py-2 px-4 rounded-lg shadow-sm hover:bg-green-600 transition-colors"
                                                                         onClick={() => handleAcceptUser(user._id)}
                                                                         aria-label={`Accept ${user.name}`}
                                                                   >
+                                                                        <MdCheckCircle className="inline mr-2" />
                                                                         Accept
                                                                   </button>
                                                                   <button
-                                                                        className="bg-red-500 text-white py-2 px-4 rounded-lg shadow-sm hover:bg-red-600 transition-colors"
+                                                                        className="bg-red-700 text-white py-2 px-4 rounded-lg shadow-sm hover:bg-red-600 transition-colors"
                                                                         onClick={() => handleDeleteUser(user._id)}
                                                                         aria-label={`Delete ${user.name}`}
                                                                   >
+                                                                        <MdDelete className="inline mr-2" />
                                                                         Delete
                                                                   </button>
                                                             </div>
@@ -158,7 +153,6 @@ const ManageAccount = () => {
                                           />
                                           <button onClick={() => { }} className='bg-bloe hover:scale-95 hover:brightness-125 text-white text-xl  font-bold py-2 px-8 rounded-2xl border-2 border-bloe shadow-xl'>Search</button>
                                     </div>
-
                               </div>
 
                               {/* Active Users Table */}
@@ -177,7 +171,7 @@ const ManageAccount = () => {
                                                 {users
                                                       .filter((user) => user.name.toUpperCase().includes(search.toUpperCase()))
                                                       .map((user, index) => (
-                                                            <tr className='hover:bg-vanilla h- 12 rounded-3xl' key={index}>
+                                                            <tr className='hover:bg-vanilla h-12 rounded-3xl' key={index}>
                                                                   <td className="border-r-4 border-bloe px-2 py-2">{index + 1}</td>
                                                                   <td className="border-r-4 border-bloe px-2 py-2">{user.name}</td>
                                                                   <td className="border-r-4 border-bloe px-2 py-2">{user.username}</td>
@@ -188,6 +182,7 @@ const ManageAccount = () => {
                                                                               onClick={() => handleSaveButton(user)}
                                                                               aria-label={`Edit ${user.name}`}
                                                                         >
+                                                                              <MdEdit className="inline mr-2" />
                                                                               Edit
                                                                         </button>
                                                                   </td>

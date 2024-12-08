@@ -5,6 +5,7 @@ import CurrentlyParked from '../components/CurrentlyParked';
 import Slots from '../components/Slots';
 import Swal from 'sweetalert2';
 import Clock from '../components/Clock';
+import DoughnutBurat from '../components/dougnutBurat';
 
 // in
 import ParkIn from '../components/ParkIn';
@@ -77,7 +78,7 @@ const Dashboard = () => {
 
       return (
             <>
-                  <div className="mx-auto max-w-[90%] lg:max-w-[80%] mt-[10vh] lg:mt-[15vh] text-deepBlue">
+                  <div className="mx-auto max-w-[90%] lg:max-w-[85%] mt-[10vh] lg:mt-[15vh] text-deepBlue">
                         {/* CONTENT GRID LEFT AND RIGHT */}
                         <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-6 lg:gap-10">
                               {/* LEFT */}
@@ -89,22 +90,24 @@ const Dashboard = () => {
                               {/* RIGHT */}
                               <div>
 
-                                    <div className="bg-offWhite p-4 mb-4 rounded-2xl w-full border-4 border-deepBlue">
-                                          <Slots
-                                                vehicles={vehicles}
-                                                twoWheels={twoWheels}
-                                                threeAndFourWheels={threeAndFourWheels}
-                                          />
-                                    </div>
+                                    <Slots
+                                          vehicles={vehicles}
+                                          twoWheels={twoWheels}
+                                          threeAndFourWheels={threeAndFourWheels}
+                                    />
 
 
-                                    <div className="flex flex-col gap-4 mb-4">
-                                          {/* PARKED */}
-                                          <CurrentlyParked vehicles={vehicles} hoursLimit={hoursLimit} />
-                                    </div>
+
+                                    <DoughnutBurat />
+
                               </div>
                         </div>
                         {/* End of content */}
+                  </div>
+
+                  <div className="flex flex-col gap-4 mb-4 w-[90%] lg:w-[96%] mx-auto mt-10">
+                        {/* PARKED */}
+                        <CurrentlyParked vehicles={vehicles} hoursLimit={hoursLimit} />
                   </div>
 
                   {/* CONDITIONAL RENDERING */}
