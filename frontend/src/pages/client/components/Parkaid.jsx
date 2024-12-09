@@ -298,7 +298,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                               <button
                                     onClick={handleCaptureAndRecognize}
                                     className={`bg-greenWich  font-bold text-white text-xl hover:scale-90 px-6 py-2 rounded-lg shadow hover:bg-green-700 ${loading ? 'opacity-50 cursor-not-allowed' : ''
-                                          }`}
+                                          }`} full
                                     disabled={loading}
                               >
                                     {loading ? 'Recognizing...' : 'Recognize Plate'}
@@ -308,46 +308,48 @@ const Parkaid = ({ vehicles, parkingRules }) => {
 
                   {/* Detected Plate Section */}
                   {recognizedText && (
-                        <div className="w-full bg-white shadow-lg rounded-lg p-8 text-center">
-                              <h2 className="text-2xl font-bold text-gray-800 mb-6">Detected Plate Number</h2>
-                              <p className="text-4xl font-mono text-blue-700 mb-8">{recognizedText}</p>
-                              {vehicleData ? (
-                                    <button
-                                          onClick={handleParkOut}
-                                          className="bg-pink hover:scale-90 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg"
-                                    >
-                                          PARK OUT
-                                    </button>
-                              ) : (
-                                    <>
-                                          <div className="flex justify-center mt-4 space-x-8">
-                                                {['2 Wheels', '3 Wheels', '4 Wheels'].map((cat) => (
-                                                      <label
-                                                            key={cat}
-                                                            className="flex items-center space-x-3 bg-gray-100 px-4 py-2 rounded-lg shadow cursor-pointer hover:bg-gray-200 transition"
-                                                      >
-                                                            <input
-                                                                  type="radio"
-                                                                  value={cat}
-                                                                  checked={category === cat}
-                                                                  onChange={() => setCategory(cat)}
-                                                                  className="form-radio w-6 h-6"
-                                                            />
-                                                            <span className="text-lg font-medium text-gray-800">{cat}</span>
-                                                      </label>
-                                                ))}
-                                          </div>
-                                          <p className="mt-6 text-lg text-gray-700">
-                                                Charges: <span className="font-bold text-gray-900">{category === '2 Wheels' ? '15' : '20'} pesos</span>
-                                          </p>
+                        <div className="md:h-[800px] flex flex-col justify-center w-full bg-white shadow-lg rounded-lg p-8 text-center">
+                              <div>
+                                    <h2 className="text-2xl font-bold text-gray-800 mb-6">Detected Plate Number</h2>
+                                    <p className="text-4xl font-mono text-blue-700 mb-8">{recognizedText}</p>
+                                    {vehicleData ? (
                                           <button
-                                                onClick={handleParkIn}
-                                                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg mt-6"
+                                                onClick={handleParkOut}
+                                                className="bg-pink hover:scale-90 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg"
                                           >
-                                                PARK IN
+                                                PARK OUT
                                           </button>
-                                    </>
-                              )}
+                                    ) : (
+                                          <>
+                                                <div className="flex justify-center mt-4 space-x-8">
+                                                      {['2 Wheels', '3 Wheels', '4 Wheels'].map((cat) => (
+                                                            <label
+                                                                  key={cat}
+                                                                  className="flex items-center space-x-3 bg-gray-100 px-4 py-2 rounded-lg shadow cursor-pointer hover:bg-gray-200 transition"
+                                                            >
+                                                                  <input
+                                                                        type="radio"
+                                                                        value={cat}
+                                                                        checked={category === cat}
+                                                                        onChange={() => setCategory(cat)}
+                                                                        className="form-radio w-6 h-6"
+                                                                  />
+                                                                  <span className="text-lg font-medium text-gray-800">{cat}</span>
+                                                            </label>
+                                                      ))}
+                                                </div>
+                                                <p className="mt-6 text-lg text-gray-700">
+                                                      Charges: <span className="font-bold text-gray-900">{category === '2 Wheels' ? '15' : '20'} pesos</span>
+                                                </p>
+                                                <button
+                                                      onClick={handleParkIn}
+                                                      className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg mt-6"
+                                                >
+                                                      PARK IN
+                                                </button>
+                                          </>
+                                    )}
+                              </div>
                         </div>
                   )}
 
