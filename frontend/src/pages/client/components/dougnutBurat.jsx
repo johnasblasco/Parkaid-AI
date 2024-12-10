@@ -42,7 +42,7 @@ const DoughnutBurat = () => {
             datasets: [
                   {
                         data: [TwoWheels, ThreeWheels, FourWheels],
-                        backgroundColor: ['#34D399', '#60A5FA', '#9932cc'],
+                        backgroundColor: ['#FFC300', '#003566', '#22c55e'],
                         hoverOffset: 4,
                   },
             ],
@@ -76,21 +76,21 @@ const DoughnutBurat = () => {
 
                         {/* Vehicle Data Section */}
                         <div className="w-full md:w-[50%] flex flex-col items-center space-y-6">
-                              <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-green-300 to-green-500 rounded-lg shadow-md w-full">
+                              <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-[#FFC300] to-[#f5cc44] rounded-lg shadow-md w-full">
                                     <img src="/motorcycle.png" className="w-12 h-12" alt="Motorcycle Icon" />
                                     <p className="text-lg font-semibold text-white">
                                           <span className="text-xl text-green-100">2-Wheels</span>: <span className="font-bold text-2xl">{TwoWheels}</span>
                                     </p>
                               </div>
 
-                              <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-blue-300 to-blue-500 rounded-lg shadow-md w-full">
+                              <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-[#003566] to-[#2a69a5] rounded-lg shadow-md w-full">
                                     <img src="/tricycle.png" className="w-12 h-12" alt="Tricycle Icon" />
                                     <p className="text-lg font-semibold text-white">
                                           <span className="text-xl text-blue-100">3-Wheels</span>: <span className="font-bold text-2xl">{ThreeWheels}</span>
                                     </p>
                               </div>
 
-                              <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-pink to-purple-800 rounded-lg shadow-md w-full">
+                              <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-[#22c55e] to-[#35d16e] rounded-lg shadow-md w-full">
                                     <img src="/car.png" className="w-14 h-14" alt="Car Icon" />
                                     <p className="text-lg font-semibold text-white">
                                           <span className="text-xl text-yellow-100">4-Wheels</span>: <span className="font-bold text-2xl">{FourWheels}</span>

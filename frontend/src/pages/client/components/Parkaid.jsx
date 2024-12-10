@@ -246,13 +246,13 @@ const Parkaid = ({ vehicles, parkingRules }) => {
 
 
       return (
-            <div className=" mt-10 shadow-2xl flex flex-col items-center justify-center  md:h-[800px] w-full max-w-3xl mx-auto bg-black/10 p-6 rounded-lg  space-y-8">
+            <div className=" shadow-2xl flex flex-col items-center justify-center  md:h-[800px] w-full max-w-3xl mx-auto bg-black/10 p-6 rounded-lg  space-y-8">
                   {/* Select Camera */}
                   {!imageSrc && !recognizedText && (
-                        <div className="w-full bg-offWhite rounded-lg shadow-md p-6 text-center">
+                        <div className="w-full border-4 border-deepBlue bg-offWhite rounded-lg shadow-md p-6 text-center">
                               <label className="block text-deepBlue font-bold mb-4">Select Camera:</label>
                               <select
-                                    className="w-full border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-deepBlue rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-deepBlue"
                                     value={selectedDeviceId}
                                     onChange={(e) => setSelectedDeviceId(e.target.value)}
                               >
@@ -267,7 +267,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
 
                   {/* Webcam Section */}
                   {!imageSrc && (
-                        <div className="w-full bg-offWhite rounded-lg shadow-lg p-6 flex flex-col items-center">
+                        <div className="w-full border-4 border-deepBlue bg-offWhite rounded-lg shadow-lg p-6 flex flex-col items-center">
                               <Webcam
                                     audio={false}
                                     ref={webcamRef}

@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import moment from 'moment';
+import { MdCarRental } from "react-icons/md";
+
 
 const CurrentlyParked = ({ vehicles, hoursLimit }) => {
       const [timers, setTimers] = useState({});
 
-      // Format duration into days, hours, and minutes
       const formatTime = (startDate) => {
             const startTime = moment(startDate);
-            const endTime = moment(); // Assuming current time is end time
+            const endTime = moment();
             const duration = moment.duration(endTime.diff(startTime));
 
             const days = Math.floor(duration.asDays());
@@ -16,7 +17,6 @@ const CurrentlyParked = ({ vehicles, hoursLimit }) => {
             return { days, hours, minutes };
       };
 
-      // Update timers every minute
       useEffect(() => {
             const intervalId = setInterval(() => {
                   const updatedTimers = {};
@@ -25,55 +25,64 @@ const CurrentlyParked = ({ vehicles, hoursLimit }) => {
                         updatedTimers[index] = { days, hours, minutes };
                   });
                   setTimers(updatedTimers);
-            }, 60000); // Update every minute (60000 milliseconds)
+            }, 60000);
 
             return () => clearInterval(intervalId);
       }, [vehicles]);
 
-      // Determine if vehicle is overtime
-      const isOvertime = (hours) => hours >= hoursLimit && hoursLimit !== 0;
+      const isOvertime = (totalHours) => totalHours >= hoursLimit && hoursLimit > 0;
+
 
       return (
-            <div className="font-bold relative border-4 border-deepBlue shadow-2xl min-h-[350px] p-4 pb-8 overflow-y-auto bg-offWhite rounded-2xl">
-                  {/* Responsive Table */}
-                  <div className="overflow-x-auto">
-                        <table className="w-full table-auto text-sm lg:text-base">
-                              <thead>
-                                    <tr className="text-center bg-deepBlue text-white">
-                                          <th className="border-b-4 border-deepBlue p-2">Plate Number</th>
-                                          <th className="border-l-4 border-b-4 border-r-4 border-deepBlue p-2">Category</th>
-                                          <th className="border-l-4 border-b-4 border-deepBlue p-2">In Time</th>
-                                          <th className="border-l-4 border-b-4 border-deepBlue p-2">Duration</th>
-                                          <th className="border-l-4 border-b-4 border-deepBlue p-2">Charges</th>
-                                    </tr>
-                              </thead>
-                              <tbody>
-                                    {vehicles.map((vehicle, index) => {
-                                          const { days, hours, minutes } = timers[index] || formatTime(vehicle.startDate);
-                                          const overtime = isOvertime(hours);
+            <div className="font-extrabold relative backdrop-blur-3xl  shadow-md rounded-2xl p-6">
+                  <h2 className="flex justify-center gap-4 text-3xl font-extrabold text-deepBlue mb-6 shadow-lg p-3 bg-offWhite rounded-lg">
 
-                                          return (
-                                                <tr key={index} className="text-center even:bg-gray-100 odd:bg-white">
-                                                      <td className="p-2">{vehicle.plateNumber}</td>
-                                                      <td className="p-2 border-l-4 border-r-4 border-deepBlue">{vehicle.category}</td>
-                                                      <td className="p-2 border-l-4 border-r-4 border-deepBlue">
-                                                            {moment(vehicle.startDate).format('hh:mm A')}
-                                                      </td>
-                                                      <td
-                                                            className={`p-2 border-l-4 border-r-4 border-deepBlue ${overtime ? 'bg-red-500 text-white' : ''
-                                                                  }`}
-                                                      >
-                                                            {days > 0
-                                                                  ? `${days} days ${hours} hrs and ${minutes} mins`
-                                                                  : `${hours} hours and ${minutes} minutes`}
-                                                      </td>
-                                                      <td className="p-2">PHP: {vehicle.charges}</td>
-                                                </tr>
-                                          );
-                                    })}
-                              </tbody>
-                        </table>
-                  </div>
+                        <MdCarRental className='text-deepBlue text-4xl ' /> Parked Vehicles Overview
+
+
+
+                  </h2>
+
+                  <table className="w-full table-auto text-sm lg:text-base ">
+                        <thead className="bg-deepBlue text-white rounded-t-2xl">
+                              <tr>
+                                    <th className='rounded-tl-2xl rounded-bl-2xl'></th>
+                                    <th className='p-4 '>Ticket Number</th>
+                                    <th className="p-4 ">Plate Number</th>
+                                    <th className="p-4">Category</th>
+                                    <th className="p-4">In Time</th>
+                                    <th className="p-4">Duration</th>
+                                    <th className="p-4 rounded-tr-2xl rounded-br-2xl">Charges</th>
+                              </tr>
+                        </thead>
+                        <tbody className='text-white'>
+                              {vehicles.map((vehicle, index) => {
+                                    const { days, hours, totalHours, minutes } = timers[index] || formatTime(vehicle.startDate);
+                                    const overtime = isOvertime(totalHours);
+
+                                    return (
+                                          <tr
+                                                key={index}
+                                                className={`bg-offWhite text-center border-b last:border-none transition duration-300 ease-in-out hover:text-deepBlue hover:bg-gray-200 hover:shadow-md ${overtime ? 'bg-red-100 text-red-600' : 'bg-transparent'
+                                                      }`}
+                                          >
+                                                <td className='p-4'>{index + 1} ) </td>
+                                                <td className='p-4'>{vehicle.ticketNumber}</td>
+                                                <td className="p-4">{vehicle.plateNumber}</td>
+                                                <td className="p-4">{vehicle.category}</td>
+                                                <td className="p-4">{moment(vehicle.startDate).format('hh:mm A')}</td>
+                                                <td className="p-4">
+                                                      {days > 0
+                                                            ? `${days} days ${hours} hrs and ${minutes} mins`
+                                                            : `${hours} hours and ${minutes} minutes`}
+                                                </td>
+                                                <td className="p-4"><span className=' bg-greenWich/50 p-2 rounded-lg'>₱ {vehicle.charges}</span></td>
+                                          </tr>
+                                    );
+                              })}
+
+                        </tbody>
+                  </table>
             </div>
       );
 };
