@@ -23,11 +23,18 @@ const Admin = () => {
                                     navigate('/admin/home/dashboard');
                                     setTimeout(() => {
                                           Swal.fire({
-                                                position: "center",
+                                                title: "LOG IN SUCCESSFUL!",
+                                                width: 600,
                                                 icon: "success",
-                                                title: "Sucessfully logged in!",
-                                                showConfirmButton: false,
-                                                timer: 1500
+                                                padding: "3em",
+                                                color: "#716add",
+                                                timer: 2000,
+                                                background: "#fff",
+                                                backdrop: `
+                                                  rgba(0,0,10, 18, 26)
+                                                  left top
+                                                  no-repeat
+                                                `
                                           });
                                     }, 1500);
                               }

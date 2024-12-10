@@ -54,10 +54,18 @@ const Header = () => {
                               );
 
                               logoutAlert.fire({
+                                    title: "LOG OUT SUCCESSFUL!",
+                                    width: 600,
                                     icon: "success",
-                                    title: "Successfully logged out!",
-                                    showConfirmButton: false,
-                                    timer: 1000
+                                    padding: "3em",
+                                    color: "#716add",
+                                    timer: 2000,
+                                    background: "#fff",
+                                    backdrop: `
+                                       rgba(0,0,10, 18, 26)
+                                      left top
+                                      no-repeat
+                                    `
                               });
                               navigate("/");
                         }
