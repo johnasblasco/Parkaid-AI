@@ -307,12 +307,15 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                   )}
 
                   {/* Detected Plate Section */}
+                  {/* Detected Plate Section */}
                   {recognizedText && (
                         <div className="md:h-[800px] flex flex-col justify-center w-full bg-white shadow-lg rounded-lg p-8 text-center">
                               <div>
                                     <h2 className="text-2xl font-bold text-gray-800 mb-6">Detected Plate Number</h2>
                                     <p className="text-4xl font-mono text-blue-700 mb-8">{recognizedText}</p>
-                                    {vehicleData ? (
+                                    {recognizedText === 'No text detected.' ? (
+                                          <p className="text-lg text-red-600 font-semibold mb-6">No valid plate detected. Please try again.</p>
+                                    ) : vehicleData ? (
                                           <button
                                                 onClick={handleParkOut}
                                                 className="bg-pink hover:scale-90 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg"
@@ -352,6 +355,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                               </div>
                         </div>
                   )}
+
 
 
                   {/* Reset Button */}
