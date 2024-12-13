@@ -19,6 +19,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
 
       const [myImg, setMyImg] = useState("");
 
+      //weyt
 
       useEffect(() => {
             const fetchLatestImage = async () => {
