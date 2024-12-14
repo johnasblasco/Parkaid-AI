@@ -111,11 +111,11 @@ const CurrentlyParked = ({ vehicles, hoursLimit }) => {
                                     return (
                                           <tr
                                                 key={index}
-                                                className={`text-center border-b last:border-none transition duration-300 ease-in-out hover:text-deepBlue hover:bg-gray-200 hover:shadow-md ${overtime
+                                                className={`text-center border-b bg-transparent last:border-none transition duration-300 ease-in-out hover:text-deepBlue hover:bg-gray-200 hover:shadow-md ${overtime
                                                       ? 'bg-red-100 text-red-600'
                                                       : rank
-                                                            ? 'bg-yellow-300 text-black font-bold'
-                                                            : 'bg-transparent'
+                                                            ? 'hover:bg-yellow-300'
+                                                            : 'hover:bg-gray-200'
                                                       }`}
                                           >
                                                 <td className="p-4">{index + 1})</td>
