@@ -5,6 +5,7 @@ import ManageAccount from "./pages/ManageAccount"
 import ManageVehicles from "./pages/ManageVehicles"
 import Dashboard from "./pages/Dashboard"
 import Reports from "./pages/Reports"
+import RewardSystem from "./pages/RewardSystem"
 import io from 'socket.io-client';
 import 'animate.css';
 
@@ -156,6 +157,7 @@ const Home = () => {
                                     <Route path="/manage-vehicles" element={<ManageVehicles />} />
                                     <Route path="/dashboard" element={<Dashboard />} />
                                     <Route path="/reports" element={<Reports />} />
+                                    <Route path="/reward-system" element={<RewardSystem />} />
                               </Routes>
                         </div>
                   </myContext.Provider>

@@ -47,6 +47,14 @@ const Navbar = () => {
                                     >
                                           Reports
                                     </Link>
+
+                                    <Link
+                                          to="/admin/home/reward-system"
+                                          onClick={() => handleLinkClick('reward')}
+                                          className={`rounded-full w-[200px] border-4 border-[#001858] py-2 px-4 ${activeLink === 'reward' ? 'bg-darkYellow' : ''}`}
+                                    >
+                                          Reward System
+                                    </Link>
                               </div>
                         </div>
                   </nav>
