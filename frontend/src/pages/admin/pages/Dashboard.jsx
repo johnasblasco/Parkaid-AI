@@ -63,7 +63,7 @@ const Dashboard = () => {
 
                         const usersResponse = await axios.get("https://capstone-parking.onrender.com/user");
 
-                        setUsers(usersResponse.data.filter(user => user.status == true))
+                        setUsers(usersResponse.data.filter(user => user.status == true && user.login == true))
 
                         const earningsResponse = await axios.get("https://capstone-parking.onrender.com/earnings");
 
@@ -179,8 +179,8 @@ const Dashboard = () => {
                                                       <tr key={index} className={`transition-transform duration-300 hover:scale-105 ${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'} border-b border-gray-200 hover:bg-gray-200`}>
                                                             <td className="px-6 py-4 text-deepBlue font-semibold">{user.name}</td>
 
-                                                            <td className={`px-6 py-4 font-semibold ${user.login ? 'text-green-600' : 'text-red-600'}`}>
-                                                                  {user.login ? "ONLINE" : "OFFLINE"}
+                                                            <td className={`px-6 py-4 font-semibold text-green-600`}>
+                                                                  ONLINE
                                                             </td>
                                                       </tr>
                                                 ))}
