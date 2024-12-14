@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { MdCarRental } from "react-icons/md";
+import { FaTrophy, FaCrown } from 'react-icons/fa'; // Add icons for trophy and crown
+import { IoIosStar } from 'react-icons/io'; // Star icon
 import axios from 'axios';
 
 // Utility function to normalize plate numbers (remove spaces and make characters consistent)
@@ -29,24 +31,20 @@ const CurrentlyParked = ({ vehicles, hoursLimit }) => {
       // Calculate frequency for the top 5 plates, considering all vehicles (status: true and false)
       useEffect(() => {
             if (allVehicles.length > 0) {
-                  // Count frequency of normalized plate numbers across all vehicles
                   const plateFrequency = allVehicles.reduce((acc, vehicle) => {
                         const normalizedPlate = normalizePlateNumber(vehicle.plateNumber);
                         acc[normalizedPlate] = (acc[normalizedPlate] || 0) + 1;
                         return acc;
                   }, {});
 
-                  // Filter out vehicles that have parked fewer than 5 times
                   const filteredPlates = Object.entries(plateFrequency)
                         .filter(([_, count]) => count >= 5)  // Only keep plates that have been used 5 or more times
                         .map(([plateNumber, count]) => ({ plateNumber, count }));
 
-                  // Sort plate numbers by frequency and take the top 5
                   const sortedPlates = filteredPlates
                         .sort((a, b) => b.count - a.count || a.plateNumber.localeCompare(b.plateNumber))  // Sort by frequency, then alphabetically
                         .slice(0, 5);
 
-                  // Transform into a lookup object for easier access
                   const lookup = sortedPlates.reduce((acc, { plateNumber }, index) => {
                         acc[plateNumber] = index + 1; // Rank starts at 1
                         return acc;
@@ -82,6 +80,19 @@ const CurrentlyParked = ({ vehicles, hoursLimit }) => {
       }, [vehicles]);
 
       const isOvertime = (totalHours) => totalHours >= hoursLimit && hoursLimit > 0;
+
+      const getRankIcon = (rank) => {
+            switch (rank) {
+                  case 1:
+                        return <FaCrown className="text-yellow-500 text-xl mb-2" />; // Golden Crown for Rank 1
+                  case 2:
+                        return <FaTrophy className="text-gray-400 text-md" />; // Silver Trophy for Rank 2
+                  case 3:
+                        return <FaTrophy className="text-amber-500 text-md" />; // Bronze Trophy for Rank 3
+                  default:
+                        return <IoIosStar className="text-yellow-500 text-md" />; // Star for Rank 4 and 5
+            }
+      };
 
       return (
             <div className="font-extrabold relative backdrop-blur-3xl shadow-md rounded-2xl p-6">
@@ -121,17 +132,27 @@ const CurrentlyParked = ({ vehicles, hoursLimit }) => {
                                                 <td className="p-4">{index + 1})</td>
                                                 <td className="p-4">{vehicle.ticketNumber}</td>
                                                 <td className="p-4 relative group">
-                                                      {vehicle.plateNumber}
-                                                      {rank && (
-                                                            <>
-                                                                  <span className="ml-2 text-yellow-500 text-lg font-bold">★</span>
-                                                                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-gradient-to-r from-yellow-400 to-yellow-600 text-black text-sm font-semibold py-2 px-4 rounded-xl shadow-lg border border-yellow-500 z-10">
-                                                                        Rank: {rank}
-                                                                        <div className="absolute w-3 h-3 bg-yellow-500 transform rotate-45 -bottom-1 left-1/2 -translate-x-1/2"></div>
+                                                      <div className="flex items-center justify-center">
+                                                            {/* Plate number */}
+                                                            <span className="mr-2">{vehicle.plateNumber}</span>
+
+                                                            {/* Rank icon, only shown if rank exists */}
+                                                            {rank && (
+                                                                  <div className="flex items-center justify-center">
+                                                                        {getRankIcon(rank)}
                                                                   </div>
-                                                            </>
+                                                            )}
+                                                      </div>
+
+                                                      {/* Tooltip for rank number */}
+                                                      {rank && (
+                                                            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-gradient-to-r from-yellow-400 to-yellow-600 text-black text-sm font-semibold py-2 px-4 rounded-xl shadow-lg border border-yellow-500 z-10">
+                                                                  Rank: {rank}
+                                                                  <div className="absolute w-3 h-3 bg-yellow-500 transform rotate-45 -bottom-1 left-1/2 -translate-x-1/2"></div>
+                                                            </div>
                                                       )}
                                                 </td>
+
                                                 <td className="p-4">{vehicle.category}</td>
                                                 <td className="p-4">{moment(vehicle.startDate).format('hh:mm A')}</td>
                                                 <td className="p-4">
