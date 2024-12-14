@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaCrown, FaTrophy } from 'react-icons/fa';
+import { IoIosStar } from 'react-icons/io';
 import axios from 'axios';
 
 const RewardSystem = () => {
@@ -82,6 +83,8 @@ const RewardSystem = () => {
                                                       {index === 0 && <FaCrown className="text-yellow-500 text-lg" />}
                                                       {index === 1 && <FaTrophy className="text-gray-500 text-lg" />}
                                                       {index === 2 && <FaTrophy className="text-yellow-700 text-lg" />}
+                                                      {index === 3 && <IoIosStar className="text-yellow-500 text-lg" />}
+                                                      {index === 4 && <IoIosStar className="text-yellow-500 text-lg" />}
                                                       <span>{index + 1}</span>
                                                 </td>
                                                 <td className="p-4">{plate.plate}</td>
