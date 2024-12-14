@@ -114,7 +114,7 @@ const ManageAccount = () => {
                                                 .filter((user) => user.name.toUpperCase().includes(search.toUpperCase()))
                                                 .map((user) => (
                                                       <li key={user._id} className="font-bold flex justify-between items-center p-3 border-b hover:bg-gray-50 transition-colors">
-                                                            <span className="text-lg font-semibold">{user.name} is knocking at the door!</span>
+                                                            <span className="text-lg font-semibold">"{user.name}" has submmited a request for account approval!</span>
                                                             <div className="flex space-x-2">
                                                                   <button
                                                                         className="bg-greenWich contrast-150 text-white py-2 px-4 rounded-lg shadow-sm hover:bg-green-600 transition-colors"

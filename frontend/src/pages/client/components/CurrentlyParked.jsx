@@ -1,11 +1,58 @@
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { MdCarRental } from "react-icons/md";
+import axios from 'axios';
 
+// Utility function to normalize plate numbers (remove spaces and make characters consistent)
+const normalizePlateNumber = (plateNumber) => {
+      return plateNumber.replace(/\s+/g, '').toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");  // Normalize and remove diacritics
+};
 
 const CurrentlyParked = ({ vehicles, hoursLimit }) => {
       const [timers, setTimers] = useState({});
+      const [topPlates, setTopPlates] = useState({});
+      const [allVehicles, setAllVehicles] = useState([]);
 
+      // Fetch all vehicles from the API (including those with status: false)
+      useEffect(() => {
+            const fetchAllVehicles = async () => {
+                  try {
+                        const response = await axios.get('https://capstone-parking.onrender.com/vehicle');
+                        setAllVehicles(response.data);
+                  } catch (error) {
+                        console.error("Error fetching vehicles:", error);
+                  }
+            };
+            fetchAllVehicles();
+      }, []);
+
+      // Calculate frequency for the top 5 plates, considering all vehicles (status: true and false)
+      useEffect(() => {
+            if (allVehicles.length > 0) {
+                  // Count frequency of normalized plate numbers across all vehicles
+                  const plateFrequency = allVehicles.reduce((acc, vehicle) => {
+                        const normalizedPlate = normalizePlateNumber(vehicle.plateNumber);
+                        acc[normalizedPlate] = (acc[normalizedPlate] || 0) + 1;
+                        return acc;
+                  }, {});
+
+                  // Sort plate numbers by frequency and take the top 5
+                  const sortedPlates = Object.entries(plateFrequency)
+                        .map(([plateNumber, count]) => ({ plateNumber, count }))
+                        .sort((a, b) => b.count - a.count || a.plateNumber.localeCompare(b.plateNumber))  // Sort by frequency, then alphabetically
+                        .slice(0, 5);
+
+                  // Transform into a lookup object for easier access
+                  const lookup = sortedPlates.reduce((acc, { plateNumber }, index) => {
+                        acc[plateNumber] = index + 1; // Rank starts at 1
+                        return acc;
+                  }, {});
+
+                  setTopPlates(lookup); // Save as a lookup object
+            }
+      }, [allVehicles]);
+
+      // Format parking duration
       const formatTime = (startDate) => {
             const startTime = moment(startDate);
             const endTime = moment();
@@ -32,43 +79,55 @@ const CurrentlyParked = ({ vehicles, hoursLimit }) => {
 
       const isOvertime = (totalHours) => totalHours >= hoursLimit && hoursLimit > 0;
 
-
       return (
-            <div className="font-extrabold relative backdrop-blur-3xl  shadow-md rounded-2xl p-6">
+            <div className="font-extrabold relative backdrop-blur-3xl shadow-md rounded-2xl p-6">
                   <h2 className="flex justify-center gap-4 text-3xl font-extrabold text-deepBlue mb-6 shadow-lg p-3 bg-offWhite rounded-lg">
-
-                        <MdCarRental className='text-deepBlue text-4xl ' /> Parked Vehicles Overview
-
-
-
+                        <MdCarRental className="text-deepBlue text-4xl" /> Parked Vehicles Overview
                   </h2>
 
-                  <table className="w-full table-auto text-sm lg:text-base ">
+                  <table className="w-full table-auto text-sm lg:text-base">
                         <thead className="bg-deepBlue text-white rounded-t-2xl">
                               <tr>
-                                    <th className='rounded-tl-2xl rounded-bl-2xl'></th>
-                                    <th className='p-4 '>Ticket Number</th>
-                                    <th className="p-4 ">Plate Number</th>
+                                    <th className="rounded-tl-2xl rounded-bl-2xl"></th>
+                                    <th className="p-4">Ticket Number</th>
+                                    <th className="p-4">Plate Number</th>
                                     <th className="p-4">Category</th>
                                     <th className="p-4">In Time</th>
                                     <th className="p-4">Duration</th>
                                     <th className="p-4 rounded-tr-2xl rounded-br-2xl">Charges</th>
                               </tr>
                         </thead>
-                        <tbody className='text-white'>
+                        <tbody className="text-white">
                               {vehicles.map((vehicle, index) => {
-                                    const { days, hours, totalHours, minutes } = timers[index] || formatTime(vehicle.startDate);
-                                    const overtime = isOvertime(totalHours);
+                                    const { days, hours, minutes } = timers[index] || formatTime(vehicle.startDate);
+                                    const overtime = isOvertime(hours);
+                                    const normalizedPlate = normalizePlateNumber(vehicle.plateNumber);
+                                    const rank = topPlates[normalizedPlate]; // Check the normalized plate number for rank
 
                                     return (
                                           <tr
                                                 key={index}
-                                                className={`bg-offWhite text-center border-b last:border-none transition duration-300 ease-in-out hover:text-deepBlue hover:bg-gray-200 hover:shadow-md ${overtime ? 'bg-red-100 text-red-600' : 'bg-transparent'
+                                                className={`text-center border-b last:border-none transition duration-300 ease-in-out hover:text-deepBlue hover:bg-gray-200 hover:shadow-md ${overtime
+                                                      ? 'bg-red-100 text-red-600'
+                                                      : rank
+                                                            ? 'bg-yellow-300 text-black font-bold'
+                                                            : 'bg-transparent'
                                                       }`}
                                           >
-                                                <td className='p-4'>{index + 1} ) </td>
-                                                <td className='p-4'>{vehicle.ticketNumber}</td>
-                                                <td className="p-4">{vehicle.plateNumber}</td>
+                                                <td className="p-4">{index + 1})</td>
+                                                <td className="p-4">{vehicle.ticketNumber}</td>
+                                                <td className="p-4 relative group">
+                                                      {vehicle.plateNumber}
+                                                      {rank && (
+                                                            <>
+                                                                  <span className="ml-2 text-yellow-500 text-lg font-bold">★</span>
+                                                                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-gradient-to-r from-yellow-400 to-yellow-600 text-black text-sm font-semibold py-2 px-4 rounded-xl shadow-lg border border-yellow-500 z-10">
+                                                                        Rank: {rank}
+                                                                        <div className="absolute w-3 h-3 bg-yellow-500 transform rotate-45 -bottom-1 left-1/2 -translate-x-1/2"></div>
+                                                                  </div>
+                                                            </>
+                                                      )}
+                                                </td>
                                                 <td className="p-4">{vehicle.category}</td>
                                                 <td className="p-4">{moment(vehicle.startDate).format('hh:mm A')}</td>
                                                 <td className="p-4">
@@ -76,11 +135,12 @@ const CurrentlyParked = ({ vehicles, hoursLimit }) => {
                                                             ? `${days} days ${hours} hrs and ${minutes} mins`
                                                             : `${hours} hours and ${minutes} minutes`}
                                                 </td>
-                                                <td className="p-4"><span className=' bg-greenWich/50 p-2 rounded-lg'>₱ {vehicle.charges}</span></td>
+                                                <td className="p-4">
+                                                      <span className="bg-greenWich/50 p-2 rounded-lg">₱ {vehicle.charges}</span>
+                                                </td>
                                           </tr>
                                     );
                               })}
-
                         </tbody>
                   </table>
             </div>
