@@ -38,7 +38,7 @@ const CurrentlyParked = ({ vehicles, hoursLimit }) => {
                   }, {});
 
                   const filteredPlates = Object.entries(plateFrequency)
-                        .filter(([_, count]) => count >= 5)  // Only keep plates that have been used 5 or more times
+                        .filter(([_, count]) => count >= 2)  // Only keep plates that have been used 5 or more times
                         .map(([plateNumber, count]) => ({ plateNumber, count }));
 
                   const sortedPlates = filteredPlates
