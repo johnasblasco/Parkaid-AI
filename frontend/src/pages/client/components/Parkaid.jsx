@@ -317,12 +317,16 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                                     {recognizedText === 'No text detected.' ? (
                                           <p className="text-lg text-red-600 font-semibold mb-6">No valid plate detected. Please try again.</p>
                                     ) : vehicleData ? (
-                                          <button
-                                                onClick={handleParkOut}
-                                                className="bg-pink hover:scale-90 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg"
-                                          >
-                                                PARK OUT
-                                          </button>
+                                          <>
+                                                <p className="text-2xl font-bold text-gray-800 mb-6">This Plate Numeber is Already Exist. Do you want to park out?</p>
+
+                                                <button
+                                                      onClick={handleParkOut}
+                                                      className="bg-pink hover:scale-90 text-white font-semibold px-8 py-3 rounded-lg shadow-lg text-lg"
+                                                >
+                                                      PARK OUT
+                                                </button>
+                                          </>
                                     ) : (
                                           <>
                                                 <div className="flex justify-center mt-4 space-x-8">
