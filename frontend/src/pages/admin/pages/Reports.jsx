@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 
 const Reports = () => {
 
+      const [totalCharges, setTotalCharges] = useState(0); // New state for total charges
+
       const [currentUser, setCurrentUser] = useState("eyy");
       const [todaysEarnings, setTodaysEarnings] = useState(0);
       const [allEarnings, setAllEarnings] = useState([]);
@@ -220,6 +222,18 @@ const Reports = () => {
             );
       }
 
+      // Calculate total charges for filtered vehicles
+      const calculateTotalCharges = () => {
+            return getVehicles.reduce((total, vehicle) => {
+                  return total + vehicle.charges + (moment().diff(moment(vehicle.startDate), 'hours') > hoursLimit ? overTimeFees : 0);
+            }, 0);
+      };
+      useEffect(() => {
+            const charges = calculateTotalCharges();
+            setTotalCharges(charges);
+      }, [getVehicles]);
+
+
       // Earnings Print function
       const earningsPrint = () => {
             if (!invoiceRef.current) {
@@ -235,75 +249,113 @@ const Reports = () => {
                   return;
             }
 
-            // Determine the display date
-            const displayDate = selectedDate ? moment(selectedDate).format('MMMM Do YYYY') : 'Today';
+            const totalCharges = calculateTotalCharges();
 
-            // Structure the earnings and vehicle information
+            // Determine the display date
+            const displayDate = selectedDate
+                  ? moment(selectedDate).format('MMM D, YYYY')
+                  : moment().format('MMM D, YYYY');
+
             const earningsDetails = `
-          <div style="padding: 20px; font-family: Arial, sans-serif;">
-            <h1 style="text-align: center;">Daily Reports</h1>
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; margin-left:10px">
-              <tr>
-                <th style="border: 1px solid black; padding: 8px; text-align: left;">Printed By</th>
-                <td style="border: 1px solid black; padding: 8px;">ADMIN</td>
-              </tr>
-              <tr>
-                <th style="border: 1px solid black; padding: 8px; text-align: left;">Total Earnings</th>
-                <td style="border: 1px solid black; padding: 8px;">PHP ${todaysEarnings}.00</td>
-              </tr>
-              <tr>
-                <th style="border: 1px solid black; padding: 8px; text-align: left;">Selected Date</th>
-                <td style="border: 1px solid black; padding: 8px;">${displayDate}</td>
-              </tr>
-            </table>
-            ${invoiceContent}
-          </div>
-      `;
+                  <div style="padding: 40px; font-family: 'Arial', sans-serif; background-color: #f4f4f4;">
+                  <!-- Header Section -->
+                  <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #007bff; padding-bottom: 20px;">
+                        <!-- Logo Image -->
+                        <img src="${'/client.jpg'}" alt="Company Logo" style="max-width: 200px; margin-bottom: 15px;">
+                        <h1 style="font-size: 36px; color: #333; margin-top: 10px;">Financial Report</h1>
+                        <p style="font-size: 20px; color: #666;">Your earnings and invoice details for today</p>
+                  </div>
+ 
+                  <!-- Earnings Information Section -->
+                  <div style="margin-bottom: 25px; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                        <p style="font-size: 22px; color: #333;"><strong>Total Earnings:</strong> PHP ${totalCharges}.00</p>
+                        <p style="font-size: 22px; color: #333;"><strong>Date:</strong> ${displayDate}</p>
+                  </div>
+
+                  <!-- Vehicles Table Section -->
+                  <div style="margin-top: 30px; margin-left:-40px;">
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                        <thead style="background-color: #007bff; color: white; font-size: 18px;">
+                        
+                        </thead>
+                        <tbody style="font-size: 16px;">
+                        ${invoiceContent}
+                        </tbody>
+                        </table>
+                  </div>
+
+                  <!-- Footer Section -->
+                  <footer style="margin-top: 40px; text-align: center; font-size: 16px; color: #555;">
+                        <p>Printed By: <strong>ADMIN</strong></p>
+                        <p style="font-size: 14px; color: #777;">Thank you for using our services!</p>
+                  </footer>
+                  </div>
+                  `;
 
             printWindow.document.open();
             printWindow.document.write(`
-          <html>
-            <head>
-              <title>Print Earnings Report</title>
-              <style>
-                @media print {
-                  @page {
-                    size: A4;
-                    margin: 20mm;
-                  }
-                  body {
-                    font-family: Arial, sans-serif;
-                    margin: 0;
-                  }
-                  table {
-                    width: 100%;
-                    border-collapse: collapse;
-                  }
-                  th, td {
-                    border: 1px solid black;
-                    padding: 8px;
-                    text-align: center;
-                  }
-                  th {
-                    background-color: #f2f2f2;
-                  }
-                }
-              </style>
-            </head>
-            <body>
-              ${earningsDetails}
-              <script>
-                window.onload = function() {
-                  window.print();
-                };
-              </script>
-            </body>
-          </html>
-      `);
+                  <html>
+                  <head>
+                        <title>Print Financial  Report</title>
+                        <style>
+                        @media print {
+                        @page {
+                              size: A4;
+                              margin: 20mm;
+                        }
+                        body {
+                              font-family: 'Arial', sans-serif;
+                              margin: 0;
+                              background-color: #f4f4f4;
+                        }
+                        h1 {
+                              font-size: 36px;
+                              color: #333;
+                        }
+                        p {
+                              font-size: 20px;
+                              margin: 5px 0;
+                              color: #333;
+                        }
+                        footer {
+                              margin-top: 50px;
+                              font-size: 16px;
+                              color: #555;
+                        }
+                        table {
+                              width: 100%;
+                              border-collapse: collapse;
+                              margin-top: 20px;
+                        }
+                        th, td {
+                              border: 1px solid #ddd;
+                              padding: 15px;
+                              text-align: left;
+                        }
+                        th {
+                              background-color: #007bff;
+                              color: white;
+                        }
+                        td {
+                              background-color: #ffffff;
+                              color: #333;
+                        }
+                        }
+                        </style>
+                  </head>
+                  <body>
+                        ${earningsDetails}
+                        <script>
+                        window.onload = function() {
+                        window.print();
+                        };
+                        </script>
+                  </body>
+                  </html>
+                  `);
             printWindow.document.close();
             printWindow.focus();
       };
-
 
 
       return (
@@ -313,14 +365,14 @@ const Reports = () => {
                         <div className='flex justify-between ml-[3%] w-[75vw] h-[20vh]'>
                               {/* today's vehicle */}
                               <div className='h-max-700:p-16 flex gap-4 items-center pt-10 justify-center relative border-4 border-deepBlue shadow-2xl rounded-3xl bg-white p-2 w-[30%]'>
-                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Daily Vehicle</p>
+                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Total Vehicle</p>
                                     <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>{todaysVehicles}</p>
                               </div>
                               {/* today earnings */}
                               <div className='h-max-700:p-16 flex gap-4 items-center pt-10 justify-center relative border-4 border-deepBlue shadow-2xl rounded-3xl bg-white p-2 w-[30%]'>
-                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Daily Earnings</p>
+                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Total Earnings</p>
                                     <p className='h-max-700:text-3xl text-5xl font-bold text-deepBlue'>PHP</p>
-                                    <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>{todaysEarnings}.00</p>
+                                    <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>{totalCharges}.00</p>
                               </div>
 
                               {/* Filter */}
@@ -405,7 +457,6 @@ const Reports = () => {
                                                             <th className='border-2 border-deepBlue p-2'>Out Time</th>
                                                             <th className='border-2 border-deepBlue p-2'>Duration</th>
                                                             <th className='border-2 border-deepBlue p-2'>Charges</th>
-                                                            <th className='border-2 border-deepBlue p-2'>Extra Charges</th>
                                                       </tr>
                                                 </thead>
                                                 <tbody>
@@ -440,7 +491,6 @@ const Reports = () => {
                                                                         </td>
 
                                                                         <td className='border-2 border-deepBlue p-2'>{vehicle.charges}</td>
-                                                                        <td className='border-2 border-deepBlue p-2'>{hoursDifference > hoursLimit && hoursLimit != 0 ? `+${overTimeFees}.00` : '0.00'}</td>
                                                                   </tr>
                                                             )
                                                       })

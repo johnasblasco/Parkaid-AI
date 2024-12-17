@@ -143,7 +143,7 @@ const Dashboard = () => {
                               </div>
                               {/* Total Employees */}
                               <div className='h-max-700:p-16 flex gap-4 items-center pt-10 justify-center relative border-4 border-deepBlue shadow-2xl rounded-3xl bg-white p-2 w-[30%]'>
-                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Total Employees</p>
+                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Online Employees</p>
                                     <FaUser className='text-6xl' />
                                     <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>{users.length}</p>
                               </div>
