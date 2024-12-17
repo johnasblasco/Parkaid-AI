@@ -107,6 +107,8 @@ const Dashboard = () => {
 
                   <div className="flex flex-col gap-4 mb-4 w-[90%] lg:w-[96%] mx-auto mt-10">
                         {/* PARKED */}
+
+                        <a href="https://reward-system-rho.vercel.app/" target='_blank' className="w-fit ml-40 p-2  text-gray-400 text-md hover:text-white shadow-2xl shadow-blue-800">View Reward System</a>
                         <CurrentlyParked vehicles={vehicles} hoursLimit={hoursLimit} />
                   </div>
 

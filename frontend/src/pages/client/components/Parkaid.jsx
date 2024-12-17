@@ -12,6 +12,9 @@ const Parkaid = ({ vehicles, parkingRules }) => {
       const [loading, setLoading] = useState(false); // Loading indicator
       const webcamRef = useRef(null);
 
+
+      const [rewardDescription, setRewardDescription] = useState('');
+
       const [devices, setDevices] = useState([]);
       const [selectedDeviceId, setSelectedDeviceId] = useState('');
       const [showWebcam, setShowWebcam] = useState(true); // New state to show/hide webcam
@@ -66,6 +69,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
             setRecognizedText('');
             setVehicleData(null);
             setShowWebcam(true); // Show webcam again on reset
+
       };
 
       // Perform OCR to recognize text
@@ -170,16 +174,56 @@ const Parkaid = ({ vehicles, parkingRules }) => {
             };
 
             try {
+                  // Fetch frequent parkers and rank them
+                  const response = await axios.get('https://capstone-parking.onrender.com/vehicle');
+                  const data = response.data;
+
+                  const frequencyMap = data.reduce((acc, vehicle) => {
+                        acc[vehicle.plateNumber] = (acc[vehicle.plateNumber] || 0) + 1;
+                        return acc;
+                  }, {});
+
+                  const rankedParkers = Object.entries(frequencyMap)
+                        .sort((a, b) => b[1] - a[1]) // Sort by frequency
+                        .slice(0, 5) // Top 5
+                        .map(([plateNumber]) => plateNumber);
+
+                  // Determine reward for the parker
+                  let charges = category === '2 Wheels' ? 15 : 20;
+                  const rank = rankedParkers.indexOf(recognizedText) + 1;
+
+                  if (rank === 1) {
+                        charges = 0;
+                        setRewardDescription('Free parking for being the Top 1 frequent parker!');
+                  } else if (rank === 2) {
+                        charges *= 0.5;
+                        setRewardDescription('50% discount for being the Top 2 frequent parker!');
+                  } else if (rank === 3) {
+                        charges *= 0.7;
+                        setRewardDescription('30% discount for being the Top 3 frequent parker!');
+                  } else if (rank === 4) {
+                        charges *= 0.8;
+                        setRewardDescription('20% discount for being the Top 4 frequent parker!');
+                  } else if (rank === 5) {
+                        charges *= 0.9;
+                        setRewardDescription('10% discount for being the Top 5 frequent parker!');
+                  }
+
+
+                  // Update the charges with the reward
+                  newVehicle.charges = charges;
+
+                  // Send vehicle parking data to your API
                   console.log('Parking in new vehicle:', newVehicle);
-                  const response = await axios.post('https://capstone-parking.onrender.com/vehicle', newVehicle);
+                  const responsePark = await axios.post('https://capstone-parking.onrender.com/vehicle', newVehicle);
 
                   // Log earnings
                   await axios.post("https://capstone-parking.onrender.com/earnings", {
                         currentDate: new Date().toISOString(),
-                        earnings: category === '2 Wheels' ? 15 : 20
+                        earnings: charges,
                   });
 
-                  if (response.data) {
+                  if (responsePark.data) {
                         Swal.fire({
                               title: "PARK IN SUCCESSFUL!",
                               width: 600,
@@ -187,21 +231,22 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                               color: "#716add",
                               background: "#fff",
                               backdrop: `
-                                rgba(0,0,123,0.4)
-                                url("/moving-car.gif")
-                                left top
-                                no-repeat
-                              `
+                            rgba(0,0,123,0.4)
+                            url("/moving-car.gif")
+                            left top
+                            no-repeat
+                        `
                         });
-                        setVehicleData(response.data);
-                        console.log(newVehicle, parkingRules, myImg, 'Santisima Trinidad Parish Church - Diocese of Malolos', category === '2 Wheels' ? 15 : 20);
-                        handlePrint(newVehicle, parkingRules, myImg, 'Santisima Trinidad Parish Church - Diocese of Malolos', category === '2 Wheels' ? 15 : 20);
+                        setVehicleData(responsePark.data);
+                        console.log(newVehicle, parkingRules, myImg, 'Santisima Trinidad Parish Church - Diocese of Malolos', charges);
+                        handlePrint(newVehicle, parkingRules, myImg, 'Santisima Trinidad Parish Church - Diocese of Malolos', charges);
                         resetCapture();
                   }
             } catch (error) {
                   console.error('Error parking in:', error.message);
             }
       };
+
 
 
       // Handle the "Park Out" operation
