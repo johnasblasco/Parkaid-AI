@@ -366,13 +366,13 @@ const Reports = () => {
                               {/* today's vehicle */}
                               <div className='h-max-700:p-16 flex gap-4 items-center pt-10 justify-center relative border-4 border-deepBlue shadow-2xl rounded-3xl bg-white p-2 w-[30%]'>
                                     <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Total Vehicle</p>
-                                    <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>{todaysVehicles}</p>
+                                    <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>{getVehicles.length}</p>
                               </div>
                               {/* today earnings */}
                               <div className='h-max-700:p-16 flex gap-4 items-center pt-10 justify-center relative border-4 border-deepBlue shadow-2xl rounded-3xl bg-white p-2 w-[30%]'>
                                     <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Total Earnings</p>
                                     <p className='h-max-700:text-3xl text-5xl font-bold text-deepBlue'>PHP</p>
-                                    <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>{totalCharges}.00</p>
+                                    <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>{new Intl.NumberFormat().format(totalCharges)}</p>
                               </div>
 
                               {/* Filter */}

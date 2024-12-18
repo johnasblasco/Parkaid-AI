@@ -136,10 +136,10 @@ const Dashboard = () => {
                               </div>
                               {/* Total Earnings */}
                               <div className='h-max-700:p-16 flex gap-4 items-center pt-10 justify-center relative border-4 border-deepBlue shadow-2xl rounded-3xl bg-white p-2 w-[30%]'>
-                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Total Earnings</p>
+                                    <p className='border-4 border-deepBlue font-bold absolute left-[-35px] top-2 bg-yeelow py-1 px-4 text-lg rounded-3xl'>Total Income</p>
                                     <GiMoneyStack className='text-7xl' />
 
-                                    <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>₱{totalEarnings}.00</p>
+                                    <p className='h-max-700:text-4xl text-6xl font-bold text-deepBlue'>₱{new Intl.NumberFormat().format(totalEarnings)}</p>
                               </div>
                               {/* Total Employees */}
                               <div className='h-max-700:p-16 flex gap-4 items-center pt-10 justify-center relative border-4 border-deepBlue shadow-2xl rounded-3xl bg-white p-2 w-[30%]'>

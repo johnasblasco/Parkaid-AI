@@ -71,34 +71,66 @@ const Print = ({ setShowPrint, showPrint }) => {
                   return;
             }
 
-            // Get the printable content's HTML
             const printContent = document.getElementById('printableContent').innerHTML;
 
-            // Open a new window and write the content for printing
             const printWindow = window.open('', '_blank');
             printWindow.document.open();
             printWindow.document.write(`
-                  <html>
-                        <head>
-                              <title>Print</title>
-                              <style>
-                                    body { font-family: Arial, sans-serif; }
-                                    table { width: 100%; border-collapse: collapse; }
-                                    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-                                    th { background-color: #f2f2f2; }
-                              </style>
-                        </head>
-                        <body>
-                              ${printContent}
-                        </body>
-                  </html>
+              <html>
+                <head>
+                  <title>Print</title>
+                  <style>
+                    body {
+                      font-family: 'Arial', sans-serif;
+                      margin: 0;
+                      padding: 20px;
+                      color: #333;
+                      background-color: #fff;
+                    }
+                    h1 {
+                      text-align: center;
+                      font-size: 24px;
+                      margin-bottom: 20px;
+                    }
+                    table {
+                      width: 100%;
+                      border-collapse: collapse;
+                      margin: 20px 0;
+                      font-size: 14px;
+                    }
+                    th, td {
+                      border: 1px solid #ccc;
+                      padding: 10px;
+                      text-align: left;
+                    }
+                    th {
+                      background-color: #0096FF;
+                      color: white;
+                      font-weight: bold;
+                    }
+                    tr:nth-child(even) {
+                      background-color: #f9f9f9;
+                    }
+                    footer {
+                      text-align: center;
+                      margin-top: 20px;
+                      font-size: 12px;
+                      color: #666;
+                    }
+                  </style>
+                </head>
+                <body>
+                  <h1>Print Report - ${selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1)}</h1>
+                  ${selectedDate ? `<p><strong>Filtered Date:</strong> ${selectedDate}</p>` : ''}
+                  ${printContent}
+                  <footer>
+                    Printed on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}
+                  </footer>
+                </body>
+              </html>
             `);
             printWindow.document.close();
-
-            // Trigger the print
             printWindow.print();
-
-            // Close the print window after printing
             printWindow.onafterprint = () => printWindow.close();
       };
 
@@ -166,7 +198,6 @@ const Print = ({ setShowPrint, showPrint }) => {
                                                 <th className='border-2 border-deepBlue p-2'>Out Time</th>
                                                 <th className='border-2 border-deepBlue p-2'>Duration</th>
                                                 <th className='border-2 border-deepBlue p-2'>Charges</th>
-                                                <th className='border-2 border-deepBlue p-2'>Extra Charges</th>
                                           </tr>
                                     </thead>
                                     <tbody>
@@ -189,7 +220,6 @@ const Print = ({ setShowPrint, showPrint }) => {
                                                             })()}
                                                       </td>
                                                       <td className='border-2 border-deepBlue p-2'>{vehicle.charges}</td>
-                                                      <td className='border-2 border-deepBlue p-2'>{vehicle.extraCharges}</td>
                                                 </tr>
                                           ))}
                                     </tbody>
