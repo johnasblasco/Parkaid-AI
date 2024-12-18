@@ -169,7 +169,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                   category,
                   endDate: null,
                   status: true,
-                  charges: category === '2 Wheels' ? 15 : 20,
+                  charges: category === '4 Wheels' ? 20 : 15,
                   extraCharges: 0,
             };
 
@@ -189,25 +189,26 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                         .map(([plateNumber]) => plateNumber);
 
                   // Determine reward for the parker
-                  let charges = category === '2 Wheels' ? 15 : 20;
+                  let charges = category === '4 Wheels' ? 20 : 15;
                   const rank = rankedParkers.indexOf(recognizedText) + 1;
 
                   if (rank === 1) {
                         charges = 0;
                         setRewardDescription('Free parking for being the Top 1 frequent parker!');
                   } else if (rank === 2) {
-                        charges *= 0.5;
-                        setRewardDescription('50% discount for being the Top 2 frequent parker!');
+                        charges *= 0.25;
+                        setRewardDescription('75% discount for being the Top 2 frequent parker!');
                   } else if (rank === 3) {
-                        charges *= 0.7;
-                        setRewardDescription('30% discount for being the Top 3 frequent parker!');
+                        charges *= 0.5;
+                        setRewardDescription('50% discount for being the Top 3 frequent parker!');
                   } else if (rank === 4) {
-                        charges *= 0.8;
-                        setRewardDescription('20% discount for being the Top 4 frequent parker!');
+                        charges *= 0.75;
+                        setRewardDescription('25% discount for being the Top 4 frequent parker!');
                   } else if (rank === 5) {
                         charges *= 0.9;
                         setRewardDescription('10% discount for being the Top 5 frequent parker!');
                   }
+
 
 
                   // Update the charges with the reward
@@ -363,7 +364,7 @@ const Parkaid = ({ vehicles, parkingRules }) => {
                                           <p className="text-lg text-red-600 font-semibold mb-6">No valid plate detected. Please try again.</p>
                                     ) : vehicleData ? (
                                           <>
-                                                <p className="text-2xl font-bold text-gray-800 mb-6">This Plate Numeber is Already Exist. Do you want to park out?</p>
+                                                <p className="text-2xl font-bold text-gray-800 mb-6">This Plate Number is Already Exist. Do you want to park out?</p>
 
                                                 <button
                                                       onClick={handleParkOut}
