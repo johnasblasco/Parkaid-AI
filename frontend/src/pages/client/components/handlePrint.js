@@ -122,14 +122,14 @@ export const handlePrint = (vehicleData, parkingRules, myImg, companyName, price
 
         <div class="details">
           <div class="left">
-            <p>
+            <p style="margin-left: 10px;">
               Park in: <br />
-              <b>Php ${pricePerTicket}.00</b> <br />
+              <b>₱ ${pricePerTicket}</b> <br />
               <b>Paid</b>
             </p>
           </div>
           <div class="right">
-            <p>
+            <p style="margin-right: 10px;>
               Date: <br />
               <b>${moment(vehicleData.startDate).format('MM/DD/YY')}</b> <br />
               ${moment(vehicleData.startDate).format('h:mm A')}
